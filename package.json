@@ -4,6 +4,7 @@
   "description": "Parse HTML string to an AST",
   "main": "app.js",
   "scripts": {
+    "build": "rollup src/index.js --o dist/index.js -f umd",
     "test": "mocha"
   },
   "repository": {
@@ -18,6 +19,7 @@
   },
   "homepage": "https://github.com/rodson/HTMLParser#readme",
   "devDependencies": {
-    "mocha": "^5.0.3"
+    "mocha": "^5.0.3",
+    "rollup": "^0.56.5"
   }
 }
