@@ -5,5 +5,5 @@ export function makeMap(str) {
   list.forEach(item => {
     map[item] = true;
   });
-  return val => map[val];
+  return val => map[val.toLowerCase()];
 }
