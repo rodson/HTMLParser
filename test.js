@@ -1,17 +1,18 @@
-const assert = require('assert');
-describe('Array', () => {
-  describe('#indexOf()', () => {
-    it('should return -1 when the value is not present', () => {
-      assert.equal([1, 2, 3].indexOf(4), -1);
-    });
-  });
-});
+import assert from 'assert';
+import {tokenizer} from './src/tokenizer';
 
-describe('', () => {
-  const template = `
-    <div>
+describe('tokenizer', () => {
+  it('should parse tag', () => {
+    const template = `
       <h1 class="title">this is title</h1>
-      <div data-name="hi">this is content</div>
-    </div>
-  `;
+    `;
+    assert.deepEqual(tokenizer(template.trim()), [
+      {type: 'startTagOpen', value: 'h1'},
+      {type: 'attrName', value: 'class'},
+      {type: 'attrValue', value: 'title'},
+      {type: 'startTagClose', value: '>'},
+      {type: 'text', value: 'this is title'},
+      {type: 'endTag', value: 'h1'}
+    ]);
+  });
 });
