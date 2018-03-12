@@ -6,7 +6,7 @@ export function parser(tokens = []) {
     type: 'root',
     children: []
   };
-  const parent = root;
+  let parent = root;
   let current = 0;
   while (current < tokens.length) {
     let token = tokens[current];
@@ -23,13 +23,33 @@ export function parser(tokens = []) {
         current++;
         token = tokens[current];
       }
-      parent.children.push(createASTElement({tagName, attrs, parent}));
+      const element = createASTElement({
+        tag: tagName,
+        attrs,
+        parent
+      });
+      parent.children.push(element);
+      parent = element;
+      current++;
+    } else if (token.type === 'endTag') {
+      parent = parent.parent;
+      current++;
+    } else if (token.type === 'text') {
+      const text = createASTElement({
+        tag: 'text'
+      });
+      parent.children.push(text);
+      current++;
     }
   }
   return root;
 }
 
-function createASTElement({tag, attrs = [], parent}) {
+function createASTElement({
+  tag,
+  attrs,
+  parent
+}) {
   return {
     tag,
     attrs,
