@@ -6,3 +6,12 @@ describe('Array', () => {
     });
   });
 });
+
+describe('', () => {
+  const template = `
+    <div>
+      <h1 class="title">this is title</h1>
+      <div data-name="hi">this is content</div>
+    </div>
+  `;
+});
