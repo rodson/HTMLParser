@@ -1,7 +1,6 @@
 /**
  * parse html string to tokens
  */
-
 const attrRegex = /^\s*([^\s"'<>\/=]+)(?:\s*(=)\s*(?:"([^"]*)"+|'([^']*)'+|([^\s"'=<>`]+)))?/;
 const ncname = '[a-zA-Z_][\\w\\-\\.]*';
 const qname = `((?:${ncname}\\:)?${ncname})`;
@@ -10,7 +9,6 @@ const startTagCloseRegex = /^\s*(\/?)>/;
 const endTagRegex = new RegExp(`^<\\/${qname}>`);
 const commentRegex = /^<!\--/;
 
-// start tag, end tag, comment, content, attr
 export function tokenizer(html) {
   let index = 0;
   let tokens = [];

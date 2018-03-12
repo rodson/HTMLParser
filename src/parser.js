@@ -1,54 +1,39 @@
 /**
- * html string parser
+ * parse tokens to AST
  */
-import {makeMap} from './utils';
-
-const isPlainTextElement = makeMap('script,style,textarea');
-
-const ncname = '[a-zA-Z_][\\w\\-\\.]';
-const commentRegex = /^<!\--/;
-const endTagRegex = 
-
-export const parseHTML = (html, options) => {
-  const stack = [];
-  const expectHTML = true;
-  const isUnaryTag =
-    'area,base,br,col,embed,frame,hr,img,input,isindex,keygen,' +
-    'link,meta,param,source,track,wbr';
-  const canBeLeftOpenTag =
-    'colgroup,dd,dt,li,options,p,td,tfoot,th,thead,tr,source';
-  let index = 0;
-  let last;
-  let lastTag;
-
-  while (html) {
-    last = html;
-
-    // not in plain text element
-    if (!lastTag || !isPlainTextElement(lastTag)) {
-      let textEnd = html.indexOf('<');
-      if (textEnd === 0) {
-        // comment
-        if (commentRegex.test(html)) {
-          const commentEnd = html.indexOf('-->');
-          if (commentEnd >= 0) {
-            parseComment(html);
-            // 3 is the length of comment end(-->)
-            advance(commentEnd + 3);
-            continue;
-          }
+export function parser(tokens = []) {
+  const root = {
+    type: 'root',
+    children: []
+  };
+  const parent = root;
+  let current = 0;
+  while (current < tokens.length) {
+    let token = tokens[current];
+    current++;
+    if (token.type === 'startTagOpen') {
+      const tagName = token.value;
+      const attrs = {};
+      current++;
+      token = tokens[current];
+      while (token.type !== 'startTagClose') {
+        if (token.type === 'attrName') {
+          attrs[token.value] = tokens[++current].value;
         }
-
-        // end tag
-        const endTagMatch = html.match(endTagRegex);
-        // start tag
+        current++;
+        token = tokens[current];
       }
-    } else {
+      parent.children.push(createASTElement({tagName, attrs, parent}));
     }
   }
+  return root;
+}
 
-  function parseComment(html, options) {
-    // 4 is the length of comment start(<!--)
-    options.comment && options.comment(html.substring(4, commentRegex));
-  }
-};
+function createASTElement({tag, attrs = [], parent}) {
+  return {
+    tag,
+    attrs,
+    parent,
+    children: []
+  };
+}
