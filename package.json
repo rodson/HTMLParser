@@ -1,5 +1,5 @@
 {
-  "name": "HTMLParser",
+  "name": "rs-html-parser",
   "version": "1.0.0",
   "description": "Parse HTML string to an AST",
   "main": "dist/index.js",
