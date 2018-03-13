@@ -7,7 +7,6 @@ const qname = `((?:${ncname}\\:)?${ncname})`;
 const startTagOpenRegex = new RegExp(`^<${qname}`);
 const startTagCloseRegex = /^\s*(\/?)>/;
 const endTagRegex = new RegExp(`^<\\/${qname}>`);
-const commentRegex = /^<!\--/;
 
 export default function tokenize(html) {
   let index = 0;
@@ -18,18 +17,6 @@ export default function tokenize(html) {
 
     let textEnd = html.indexOf('<');
     if (textEnd === 0) {
-      // comment
-      if (commentRegex.test(html)) {
-        const commentEnd = html.indexOf('-->');
-        if (commentEnd > 0) {
-          tokens.push({
-            type: 'comment',
-            value: html.substring(4, commentEnd)
-          });
-          advance(commentEnd + 3);
-          continue;
-        }
-      }
       // start tag
       const startTagOpen = html.match(startTagOpenRegex);
       if (startTagOpen) {
