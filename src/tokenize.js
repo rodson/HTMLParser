@@ -9,7 +9,7 @@ const startTagCloseRegex = /^\s*(\/?)>/;
 const endTagRegex = new RegExp(`^<\\/${qname}>`);
 const commentRegex = /^<!\--/;
 
-export function tokenizer(html) {
+export default function tokenize(html) {
   let index = 0;
   let tokens = [];
   let last;
@@ -40,8 +40,7 @@ export function tokenizer(html) {
         advance(startTagOpen[0].length);
         let startTagClose;
         let attr;
-        while (
-          !(startTagClose = html.match(startTagCloseRegex)) &&
+        while (!(startTagClose = html.match(startTagCloseRegex)) &&
           (attr = html.match(attrRegex))
         ) {
           advance(attr[0].length);

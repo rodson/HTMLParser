@@ -1,7 +1,7 @@
 /**
  * parse tokens to AST
  */
-export function parser(tokens = []) {
+export default function parse(tokens = []) {
   const root = {
     type: 'root',
     children: []
