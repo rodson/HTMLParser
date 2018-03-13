@@ -6,15 +6,15 @@ export function parser(tokens = []) {
     type: 'root',
     children: []
   };
-  let parent = root;
   let current = 0;
+  let tagStack = [];
+  tagStack.push(root);
   while (current < tokens.length) {
     let token = tokens[current];
     current++;
     if (token.type === 'startTagOpen') {
       const tagName = token.value;
       const attrs = {};
-      current++;
       token = tokens[current];
       while (token.type !== 'startTagClose') {
         if (token.type === 'attrName') {
@@ -25,20 +25,19 @@ export function parser(tokens = []) {
       }
       const element = createASTElement({
         tag: tagName,
-        attrs,
-        parent
+        attrs
       });
-      parent.children.push(element);
-      parent = element;
+      tagStack[tagStack.length - 1].children.push(element);
+      tagStack.push(element);
       current++;
     } else if (token.type === 'endTag') {
-      parent = parent.parent;
+      tagStack.pop();
       current++;
     } else if (token.type === 'text') {
       const text = createASTElement({
         tag: 'text'
       });
-      parent.children.push(text);
+      tagStack[tagStack.length - 1].children.push(text);
       current++;
     }
   }
@@ -47,13 +46,11 @@ export function parser(tokens = []) {
 
 function createASTElement({
   tag,
-  attrs,
-  parent
+  attrs = {}
 }) {
   return {
     tag,
     attrs,
-    parent,
     children: []
   };
 }

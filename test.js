@@ -5,6 +5,7 @@ import {
 import {
   parser
 } from './src/parser';
+import util from 'util';
 
 describe('tokenizer', () => {
   it('should tokenize html template', () => {
@@ -66,6 +67,18 @@ describe('parser', () => {
       value: 'h1'
     }
   ];
-  console.log(parser(tokens));
-  // assert.deepEqual(parser(tokens), 1);
+  assert.deepEqual(parser(tokens), {
+    type: 'root',
+    children: [{
+      tag: 'h1',
+      attrs: {
+        class: 'title'
+      },
+      children: [{
+        tag: 'text',
+        attrs: {},
+        children: []
+      }]
+    }]
+  });
 });
