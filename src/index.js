@@ -1,9 +1,9 @@
-import {tokenizer} from './tokenizer';
-import {parser} from './parser';
-import {transformer} from './transformer';
+import tokenize from './tokenize';
+import parse from './parse';
+import traverse from './traverse';
 
-export function parseTemplare(template, state) {
-  const tokens = tokenizer(template);
-  const ast = parser(tokens);
-  const newAst = transformer(ast);
+export default {
+  tokenize,
+  parse,
+  traverse
 }
