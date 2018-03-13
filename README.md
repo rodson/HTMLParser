@@ -1,3 +1,5 @@
+# rs-html-parser
+
 Parse HTML string to an AST
 
 ```
