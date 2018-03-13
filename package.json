@@ -2,9 +2,9 @@
   "name": "HTMLParser",
   "version": "1.0.0",
   "description": "Parse HTML string to an AST",
-  "main": "app.js",
+  "main": "dist/index.js",
   "scripts": {
-    "build": "rollup src/index.js --o dist/index.js -f umd",
+    "build": "rollup src/index.js --o dist/index.js -f umd --name \"bundle\"",
     "test": "mocha --require babel-register"
   },
   "repository": {
