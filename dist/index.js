@@ -13,7 +13,6 @@ const qname = `((?:${ncname}\\:)?${ncname})`;
 const startTagOpenRegex = new RegExp(`^<${qname}`);
 const startTagCloseRegex = /^\s*(\/?)>/;
 const endTagRegex = new RegExp(`^<\\/${qname}>`);
-const commentRegex = /^<!\--/;
 
 function tokenize(html) {
   let tokens = [];
@@ -21,18 +20,6 @@ function tokenize(html) {
 
     let textEnd = html.indexOf('<');
     if (textEnd === 0) {
-      // comment
-      if (commentRegex.test(html)) {
-        const commentEnd = html.indexOf('-->');
-        if (commentEnd > 0) {
-          tokens.push({
-            type: 'comment',
-            value: html.substring(4, commentEnd)
-          });
-          advance(commentEnd + 3);
-          continue;
-        }
-      }
       // start tag
       const startTagOpen = html.match(startTagOpenRegex);
       if (startTagOpen) {
@@ -150,8 +137,8 @@ function parse(tokens = []) {
       const text = createASTElement({
         tag: 'text'
       });
+      text.value = token.value;
       tagStack[tagStack.length - 1].children.push(text);
-      current++;
     }
   }
   return root;
@@ -159,7 +146,7 @@ function parse(tokens = []) {
 
 function createASTElement({
   tag,
-  attrs = {}
+  attrs = {},
 }) {
   return {
     tag,
