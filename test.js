@@ -66,16 +66,11 @@ describe('parser', () => {
   assert.deepEqual(parse(tokens), {
     type: 'root',
     children: [{
-      tag: 'h1',
+      nodeName: 'h1',
       attrs: {
         class: 'title'
       },
-      children: [{
-        tag: 'text',
-        value: 'this is title',
-        attrs: {},
-        children: []
-      }]
+      children: ['this is title']
     }]
   });
 });

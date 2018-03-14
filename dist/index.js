@@ -124,7 +124,7 @@ function parse(tokens = []) {
         token = tokens[current];
       }
       const element = createASTElement({
-        tag: tagName,
+        nodeName: tagName,
         attrs
       });
       tagStack[tagStack.length - 1].children.push(element);
@@ -134,22 +134,18 @@ function parse(tokens = []) {
       tagStack.pop();
       current++;
     } else if (token.type === 'text') {
-      const text = createASTElement({
-        tag: 'text'
-      });
-      text.value = token.value;
-      tagStack[tagStack.length - 1].children.push(text);
+      tagStack[tagStack.length - 1].children.push(token.value);
     }
   }
   return root;
 }
 
 function createASTElement({
-  tag,
+  nodeName,
   attrs = {},
 }) {
   return {
-    tag,
+    nodeName,
     attrs,
     children: []
   };

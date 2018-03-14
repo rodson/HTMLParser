@@ -1,6 +1,6 @@
 {
   "name": "rs-html-parser",
-  "version": "0.0.2",
+  "version": "0.0.4",
   "description": "Parse HTML string to an AST",
   "main": "dist/index.js",
   "scripts": {
