@@ -1,6 +1,7 @@
 import assert from 'assert';
 import tokenize from './src/tokenize';
 import parse from './src/parse';
+import traverse from './src/traverse';
 import util from 'util';
 
 describe('tokenizer', () => {
@@ -77,16 +78,66 @@ describe('parser', () => {
 
 describe('tst', () => {
   it('test', () => {
-    const input = `
+    const template = `
       <div>
         <div>{{ title }}</div>
         <div>{{ desc }}</div>
-        <button v-on:click="btnClick">click</button>
+        <button @click="btnClick">click</button>
       </div>
     `;
-    const tokens = tokenize(input.trim());
-    const ast = parse(tokens);
-    console.log(tokens);
-    console.log(util.inspect(ast, false, null));
+
+    const state = {
+      title: 'this is title',
+      desc: 'this is description',
+      btnClick: () => {
+        console.log('button is click');
+      }
+    }
+
+    const interpolationRegex = /\{\{\s*(\w+)\s*\}\}/;
+    // const interpolationRegex = /\w/;
+
+    function render(template, state) {
+      const tokens = tokenize(template.trim());
+      const ast = parse(tokens);
+      const root = createElement('div');
+      // console.log(tokens);
+      // console.log(util.inspect(ast, false, null));
+      traverse(ast, (node, parent) => {
+        if (typeof node === 'string') {
+          const match = node.match(interpolationRegex);
+          if (match) {
+            parent.el.textContent = state[match[1]];
+          }
+        } else {
+          const element = document.createElement(node.nodeName);
+          const attrs = node.attrs;
+          if (attrs) {
+            Object.keys(attrs).forEach(key => {
+              if (key.startsWith('@')) {
+                // bind event
+                const exp = attrs[key];
+                const eventType = key.substring(1);
+                const fn = state[exp];
+                element.addEventListener(eventType, fn.bind(state), false);
+              } else {
+                // add attribute
+                element.setAttribute(key, attr[key])
+              }
+            });
+          }
+          node.el = element;
+          if (parent) {
+            parent.el.appendChild(element);
+          } else {
+            root.appendChild(element);
+          }
+        }
+      });
+      return root;
+    }
+
+    const dom = render(template, state);
+    console.log(dom);
   });
 });

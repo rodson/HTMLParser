@@ -1,7 +1,7 @@
 (function (global, factory) {
 	typeof exports === 'object' && typeof module !== 'undefined' ? module.exports = factory() :
 	typeof define === 'function' && define.amd ? define(factory) :
-	(global.bundle = factory());
+	(global.rsHtmlParser = factory());
 }(this, (function () { 'use strict';
 
 /**
@@ -160,7 +160,9 @@ function traverse(ast, visitor) {
 
   function traverseNode(node, parent) {
     visitor(node, parent);
-    traverseArray(node.children, node);
+    if (node.children && Array.isArray(node.children)) {
+      traverseArray(node.children, node);
+    }
   }
 
   traverseNode(ast, null);

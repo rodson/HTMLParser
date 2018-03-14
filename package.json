@@ -4,7 +4,7 @@
   "description": "Parse HTML string to an AST",
   "main": "dist/index.js",
   "scripts": {
-    "build": "rollup src/index.js --o dist/index.js -f umd --name \"bundle\"",
+    "build": "rollup src/index.js --o dist/index.js -f umd --name \"rsHtmlParser\"",
     "test": "mocha --require babel-register"
   },
   "repository": {
