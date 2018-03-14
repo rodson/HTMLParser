@@ -37,8 +37,8 @@ export default function parse(tokens = []) {
       const text = createASTElement({
         tag: 'text'
       });
+      text.value = token.value;
       tagStack[tagStack.length - 1].children.push(text);
-      current++;
     }
   }
   return root;
@@ -46,7 +46,7 @@ export default function parse(tokens = []) {
 
 function createASTElement({
   tag,
-  attrs = {}
+  attrs = {},
 }) {
   return {
     tag,

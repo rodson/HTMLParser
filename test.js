@@ -72,9 +72,26 @@ describe('parser', () => {
       },
       children: [{
         tag: 'text',
+        value: 'this is title',
         attrs: {},
         children: []
       }]
     }]
+  });
+});
+
+describe('tst', () => {
+  it('test', () => {
+    const input = `
+      <div>
+        <div>{{ title }}</div>
+        <div>{{ desc }}</div>
+        <button v-on:click="btnClick">click</button>
+      </div>
+    `;
+    const tokens = tokenize(input.trim());
+    const ast = parse(tokens);
+    console.log(tokens);
+    console.log(util.inspect(ast, false, null));
   });
 });
